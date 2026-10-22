@@ -1,6 +1,7 @@
 // instanciando o fastify
 import Fastify from 'fastify'
 import 'dotenv/config'
+import cors from '@fastify/cors'
 
 import usersRoutes from './routes/users.routes.js'
 import authRoutes from './routes/auth.routes.js'
@@ -10,6 +11,10 @@ const fastify = Fastify({
     logger: true
 })
 
+await fastify.register(cors, { 
+    methods: '*',
+    origin: '*'
+})
 
 // declarção de rota
 fastify.get('/', (req, reply) => {
@@ -22,7 +27,7 @@ await fastify.register( authRoutes )
 
 
 // Run the server!
-fastify.listen({ port: process.env.PORT }, function (err, address) {
+fastify.listen({ port: process.env.PORT, host: '0.0.0.0' }, function (err, address) {
     if (err) {
         fastify.log.error(err)
         process.exit(1)
